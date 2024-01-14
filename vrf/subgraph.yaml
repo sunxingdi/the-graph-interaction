@@ -1,0 +1,33 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: VRFv2DirectFundingConsumer
+    network: sepolia
+    source:
+      address: "0x44Cd3824e60B59231110DBEaC4E7509663da42eD"
+      abi: VRFv2DirectFundingConsumer
+      startBlock: 5073200
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - OwnershipTransferRequested
+        - OwnershipTransferred
+        - RequestFulfilled
+        - RequestSent
+      abis:
+        - name: VRFv2DirectFundingConsumer
+          file: ./abis/VRFv2DirectFundingConsumer.json
+      eventHandlers:
+        - event: OwnershipTransferRequested(indexed address,indexed address)
+          handler: handleOwnershipTransferRequested
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: RequestFulfilled(uint256,uint256[],uint256)
+          handler: handleRequestFulfilled
+        - event: RequestSent(uint256,uint32)
+          handler: handleRequestSent
+      file: ./src/vr-fv-2-direct-funding-consumer.ts
